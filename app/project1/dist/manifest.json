@@ -1,0 +1,197 @@
+{
+    "_version": "1.65.0",
+    "sap.app": {
+        "id": "sricapm1.project1",
+        "type": "application",
+        "i18n": "i18n/i18n.properties",
+        "applicationVersion": {
+            "version": "0.0.1"
+        },
+        "title": "{{appTitle}}",
+        "description": "{{appDescription}}",
+        "resources": "resources.json",
+        "sourceTemplate": {
+            "id": "@sap/generator-fiori:lrop",
+            "version": "1.16.2",
+            "toolsId": "20777990-1526-4ae7-a0bd-892bcf0fdd71"
+        },
+        "dataSources": {
+            "mainService": {
+                "uri": "odata/v4/PurchaseApproval/",
+                "type": "OData",
+                "settings": {
+                    "annotations": [],
+                    "odataVersion": "4.0"
+                }
+            }
+        },
+        "crossNavigation": {
+            "inbounds": {
+                "sricapm-capmservice": {
+                    "semanticObject": "sricapm",
+                    "action": "capmservice",
+                    "title": "{{flpTitle}}",
+                    "signature": {
+                        "parameters": {},
+                        "additionalParameters": "allowed"
+                    }
+                }
+            }
+        }
+    },
+    "sap.ui": {
+        "technology": "UI5",
+        "icons": {
+            "icon": "",
+            "favIcon": "",
+            "phone": "",
+            "phone@2": "",
+            "tablet": "",
+            "tablet@2": ""
+        },
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+        }
+    },
+    "sap.ui5": {
+        "flexEnabled": true,
+        "dependencies": {
+            "minUI5Version": "1.132.1",
+            "libs": {
+                "sap.m": {},
+                "sap.ui.core": {},
+                "sap.fe.templates": {}
+            }
+        },
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        },
+        "models": {
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "settings": {
+                    "bundleName": "sricapm1.project1.i18n.i18n"
+                }
+            },
+            "": {
+                "dataSource": "mainService",
+                "preload": true,
+                "settings": {
+                    "operationMode": "Server",
+                    "autoExpandSelect": true,
+                    "earlyRequests": true
+                }
+            },
+            "@i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "uri": "i18n/i18n.properties"
+            }
+        },
+        "resources": {
+            "css": []
+        },
+        "routing": {
+            "config": {},
+            "routes": [
+                {
+                    "pattern": ":?query:",
+                    "name": "RequestsList",
+                    "target": "RequestsList"
+                },
+                {
+                    "pattern": "Requests({key}):?query:",
+                    "name": "RequestsObjectPage",
+                    "target": "RequestsObjectPage"
+                },
+                {
+                    "pattern": "Requests({key})/requestitems({key2}):?query:",
+                    "name": "RequestItemsObjectPage",
+                    "target": "RequestItemsObjectPage"
+                }
+            ],
+            "targets": {
+                "RequestsList": {
+                    "type": "Component",
+                    "id": "RequestsList",
+                    "name": "sap.fe.templates.ListReport",
+                    "options": {
+                        "settings": {
+                            "contextPath": "/Requests",
+                            "variantManagement": "Page",
+                            "navigation": {
+                                "Requests": {
+                                    "detail": {
+                                        "route": "RequestsObjectPage"
+                                    }
+                                }
+                            },
+                            "controlConfiguration": {
+                                "@com.sap.vocabularies.UI.v1.LineItem": {
+                                    "tableSettings": {
+                                        "type": "ResponsiveTable"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "RequestsObjectPage": {
+                    "type": "Component",
+                    "id": "RequestsObjectPage",
+                    "name": "sap.fe.templates.ObjectPage",
+                    "options": {
+                        "settings": {
+                            "editableHeaderContent": false,
+                            "contextPath": "/Requests",
+                            "navigation": {
+                                "requestitems": {
+                                    "detail": {
+                                        "route": "RequestItemsObjectPage"
+                                    }
+                                }
+                            },
+                            "content": {
+                                "header": {
+                                    "actions": {
+                                        "ApprovalSending": {
+                                            "press": "sricapm1.project1.ext.controller.ApprovalSending.ApprovalSendingMethod",
+                                            "visible": true,
+                                            "enabled": true,
+                                            "text": "Send for Approval",
+                                            "position": {
+                                                "placement": "Before",
+                                                "anchor": "EditAction"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "RequestItemsObjectPage": {
+                    "type": "Component",
+                    "id": "RequestItemsObjectPage",
+                    "name": "sap.fe.templates.ObjectPage",
+                    "options": {
+                        "settings": {
+                            "editableHeaderContent": false,
+                            "contextPath": "/Requests/requestitems"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "sap.fiori": {
+        "registrationIds": [],
+        "archeType": "transactional"
+    },
+    "sap.cloud": {
+        "public": true,
+        "service": "sri_capm"
+    }
+}

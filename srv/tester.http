@@ -1,0 +1,76 @@
+#########get
+POST http://localhost:4004/odata/v4/PurchaseApproval/datafrombpa
+Content-Type: application/json
+
+{
+  "status": "A",
+  "requestid": "14"
+}
+
+##### get the update request item
+POST http://localhost:4004/odata/v4/PurchaseApproval/updateRequestItems
+Content-Type: application/json
+
+      "requestid": 1001,
+      "status": "E",
+      "requestitems": [
+        {
+          "ItemNo": 1,
+          "ItemDesc": "MacBook Pro",
+          "Quantity": 2,
+          "ItemPrice": 25000,
+          "Material": "Laptop",
+          "Plant": "PLANT-001"
+        },
+        {
+          "ItemNo": 2,
+          "ItemDesc": "Dell XPS",
+          "Quantity": 1,
+          "ItemPrice": 20000,
+          "Material": "Laptop",
+          "Plant": "PLANT-002"
+        }
+      ]
+    }
+  }
+}
+
+
+
+#########get
+GET http://localhost:4004/odata/v4/PurchaseApproval/EditRequestItems?requestid=14
+
+#######get the request id
+GET http://localhost:4004/odata/v4/PurchaseApproval/GetRequestItems(requestid=14)
+
+
+
+###get
+POST http://localhost:4004/odata/v4/PurchaseApproval/approveRequest
+Content-Type: application/json
+
+{
+  "requestid": "13"
+}
+###get
+POST http://localhost:4004/odata/v4/PurchaseApproval/rejectRequest
+Content-Type: application/json
+
+{
+  "requestid": "13"
+}
+#####
+POST http://localhost:4004/odata/v4/PurchaseApproval/sendforapproval
+Content-Type: application/json
+
+{
+}
+
+
+### Test choosing approver for total price greater than 50000
+GET http://localhost:4004/odata/v4/PurchaseApproval/approverSelection
+Content-Type: application/json
+ 
+{
+    "totalPrice": 15000
+}
