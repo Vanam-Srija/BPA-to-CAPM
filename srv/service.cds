@@ -28,6 +28,7 @@ service PurchaseApproval @(path: 'PurchaseApproval') {
   }
   entity RequestItems as projection on db.RequestItems;
   entity EmailList as projection on db.EmailList;
+  action datafrombpa (requestid: Integer, status: String);
   function approverSelection(totalPrice: Integer) returns array of EmailList;
   function GetRequestItems(requestid: Integer) returns array of RequestItems;
   action updateRequests(
