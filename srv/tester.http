@@ -11,30 +11,20 @@ Content-Type: application/json
 POST http://localhost:4004/odata/v4/PurchaseApproval/updateRequests
 Content-Type: application/json
 
-      "requestid": 1001,
-      "status": "E",
-      "requestitems": [
-        {
-          "ItemNo": 1,
-          "ItemDesc": "MacBook Pro",
-          "Quantity": 2,
-          "ItemPrice": 25000,
-          "Material": "Laptop",
-          "Plant": "PLANT-001"
-        },
-        {
-          "ItemNo": 2,
-          "ItemDesc": "Dell XPS",
-          "Quantity": 1,
-          "ItemPrice": 20000,
-          "Material": "Laptop",
-          "Plant": "PLANT-002"
-        }
-      ]
+{
+  "requestid": "12",
+  "status": "E",
+  "requestitems": [
+    {
+      "ItemNo": "1",
+      "ItemDesc": "Sample Item",
+      "Quantity": 10,
+      "ItemPrice": 100,
+      "Material": "MAT001",
+      "Plant": "PL01"
     }
-  }
+  ]
 }
-
 
 
 #########get

@@ -284,47 +284,62 @@ this.on('GetRequestItems', async (req) => {
 
 
 this.on('updateRequests', async (req) => {
-    console.log("Received Status:", req.data.status);
-  
-    if (req.data.status !== 'E') {
-        console.log("Invalid status received. Expected 'E'");
-        return;
-    }
-  
-    // Update the Request status
-    await UPDATE(Requests)
-        .set({ status: req.data.status })
-        .where({ requestid: req.data.requestid });
-  
-    console.log(`Status updated to: ${req.data.status} for request ID: ${req.data.requestid}`);
-  
-    // Update request items if present
-    if (req.data.requestitems && req.data.requestitems.length > 0) {
+    console.log("Before Updating the data:", JSON.stringify(req.data, null, 2));
+    try {
+        console.log("Received BPA Request:", JSON.stringify(req.data, null, 2));
+   
+        if (!req.data.requestid) throw new Error("Missing requestid");
+        if (!req.data.status) throw new Error("Missing status");
+        if (!Array.isArray(req.data.requestitems)) throw new Error("Invalid requestitems format");
+   
+        console.log("Extracted requestitems:", req.data.requestitems);
+   
+        await UPDATE(Requests)
+            .set({ status: req.data.status })
+            .where({ requestid: req.data.requestid });
+   
         for (const item of req.data.requestitems) {
-            await UPSERT.into(RequestItems).entries({
-                ItemNo: item.ItemNo,
-                ItemDesc: item.ItemDesc,
-                Quantity: item.Quantity,
-                ItemPrice: item.ItemPrice,
-                Material: item.Material,
-                Plant: item.Plant,
-                Request_requestid: req.data.requestid // Ensure correct foreign key
-            });
+            console.log(" Processing Item:", JSON.stringify(item, null, 2));
+   
+            if (!item.ItemNo) {
+                console.warn("Skipping invalid item:", item);
+                continue;
+            }
+   
+            const affectedRows = await UPDATE(RequestItems)
+                .set({
+                    ItemNo: item.ItemNo,
+                    ItemDesc: item.ItemDesc,
+                    Quantity: item.Quantity,
+                    ItemPrice: item.ItemPrice,
+                    Material: item.Material,
+                    Plant: item.Plant
+                })
+                .where({ ItemNo: item.ItemNo, Request_requestid: req.data.requestid });
+   
+            console.log(`Updated ${affectedRows} row(s) for ItemNo ${item.ItemNo}`);
         }
-        console.log(`Request items upserted for request ID: ${req.data.requestid}`);
+   
+        const updatedRequest = await SELECT.one.from(Requests)
+            .where({ requestid: req.data.requestid });
+   
+        const updatedItems = await SELECT.from(RequestItems)
+            .where({ Request_requestid: req.data.requestid });
+   
+        console.log("Updated Request Data:", JSON.stringify(updatedRequest, null, 2));
+        console.log("Updated Request Items:", JSON.stringify(updatedItems, null, 2));
+   
+        return {
+            requestid: updatedRequest?.requestid || null,
+            status: updatedRequest?.status || null,
+            requestitems: updatedItems || []
+        };
+   
+    } catch (error) {
+        console.error("Error in updateRequestItems:", error.message);
+        return { error: error.message };
     }
-  
-    // Fetch and return the updated data to the UI
-    const updatedRequest = await SELECT.one.from(Requests)
-        .where({ requestid: req.data.requestid });
-  
-    const updatedItems = await SELECT.from(RequestItems)
-        .where({ Request_requestid: req.data.requestid });
-  
-    return {
-        requestid: updatedRequest.requestid,
-        status: updatedRequest.status,
-        requestitems: updatedItems
-    };
   });
+   
+
 });
