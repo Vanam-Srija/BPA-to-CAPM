@@ -283,7 +283,7 @@ this.on('GetRequestItems', async (req) => {
 });
 
 
-this.on('updateRequestItems', async (req) => {
+this.on('updateRequests', async (req) => {
     console.log("Received Status:", req.data.status);
   
     if (req.data.status !== 'A' && req.data.status !== 'X') {

@@ -8,7 +8,7 @@ Content-Type: application/json
 }
 
 ##### get the update request item
-POST http://localhost:4004/odata/v4/PurchaseApproval/updateRequestItems
+POST http://localhost:4004/odata/v4/PurchaseApproval/updateRequests
 Content-Type: application/json
 
       "requestid": 1001,

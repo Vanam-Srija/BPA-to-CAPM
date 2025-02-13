@@ -30,7 +30,7 @@ service PurchaseApproval @(path: 'PurchaseApproval') {
   entity EmailList as projection on db.EmailList;
   function approverSelection(totalPrice: Integer) returns array of EmailList;
   function GetRequestItems(requestid: Integer) returns array of RequestItems;
-  action updateRequestItems(
+  action updateRequests(
     requestid: Integer,
     status: String,
     requestitems: array of RequestItems
