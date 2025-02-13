@@ -286,8 +286,8 @@ this.on('GetRequestItems', async (req) => {
 this.on('updateRequests', async (req) => {
     console.log("Received Status:", req.data.status);
   
-    if (req.data.status !== 'A' && req.data.status !== 'X') {
-        console.log("Invalid status received. Expected 'A' or 'X'.");
+    if (req.data.status !== 'E') {
+        console.log("Invalid status received. Expected 'E'");
         return;
     }
   
